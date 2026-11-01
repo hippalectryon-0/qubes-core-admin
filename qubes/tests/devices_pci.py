@@ -22,6 +22,8 @@ import os.path
 import unittest
 from unittest import mock
 
+import libvirt
+
 import qubes.tests
 import qubes.ext.pci
 import qubes.devices
@@ -316,6 +318,16 @@ class TC_10_PCI(qubes.tests.QubesTestCase):
             assert False
 
     def test_010_unassign_missing(self):
+        self._unassign_missing("0000_c0_03.7-00_00.0-00_00.0")
+
+    def test_011_unassign_missing_on_existing_bus(self):
+        # libvirt doesn't know a removed device
+        self.app.vmm.libvirt_conn.nodeDeviceLookupByName.side_effect = (
+            libvirt.libvirtError("Node device not found")
+        )
+        self._unassign_missing("0000_00_18.7")
+
+    def _unassign_missing(self, missing_port_id):
         vm = TestVM(name="testvm", qid=1, app=self.app)
         vm.app.vmm.offline_mode = False
         vm.events_enabled = False
@@ -330,7 +342,6 @@ class TC_10_PCI(qubes.tests.QubesTestCase):
         self.dom0.devices = {"pci": dom0_pci_devices}
         self.app.domains["testvm"] = vm
         self.app.domains[vm] = vm
-        missing_port_id = "0000_c0_03.7-00_00.0-00_00.0"
         missing_device_id = "0x8086:0x8cb1::p0c0330"
         device_assignment = qubes.device_protocol.DeviceAssignment(
             qubes.device_protocol.VirtualDevice(

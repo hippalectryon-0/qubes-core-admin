@@ -34,6 +34,7 @@ import lxml.etree
 import qubes.device_protocol
 import qubes.devices
 import qubes.ext
+import qubes.utils
 from qubes.device_protocol import AssignmentMode, Port, UnknownDevice
 from qubes.exc import DeviceNotFound
 from qubes.utils import sbdf_to_path, path_to_sbdf, is_pci_path
@@ -519,6 +520,9 @@ class PCIDeviceExtension(qubes.ext.Extension):
         # Bind pci devices to pciback driver
         for assignment in vm.devices["pci"].get_assigned_devices():
             for device in assignment.devices:
+                if isinstance(device, UnknownDevice):
+                    # UnknownDevice has no libvirt node to bind to pciback
+                    continue
                 self.bind_pci_to_pciback(vm.app, device)
 
     @staticmethod
@@ -562,6 +566,13 @@ def _cache_get(vm, port_id):
     """Caching wrapper around `PCIDevice(vm, port_id)`."""
     try:
         dev = PCIDevice(Port(vm, port_id, "pci"))
+        # If a previously registered device is missing but its bus is present,
+        # PCIDevice() returns the missing device anyway
+        sbdf = f"{dev.segment}:{dev.bus}:{dev.device}.{dev.function}"
+        if not os.path.lexists(
+            f"{qubes.utils.SYSFS_BASE}/bus/pci/devices/{sbdf}"
+        ):
+            raise DeviceNotFound(port_id)
     except DeviceNotFound:
         dev = UnknownDevice(Port(vm, port_id, "pci"))
     return dev
