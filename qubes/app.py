@@ -31,7 +31,7 @@ import os
 import random
 import sys
 import time
-from typing import Any
+from typing import Any, Optional
 import traceback
 import uuid
 from contextlib import suppress
@@ -249,7 +249,7 @@ class VMMConnection:
         return self._is_xen
 
     @property
-    def xs(self):
+    def xs(self) -> "Optional[xen.lowlevel.xs.xs]":
         """Connection to Xen Store
 
         This property is available only when running on Xen.
@@ -261,7 +261,7 @@ class VMMConnection:
         return self._xs
 
     @property
-    def xc(self):
+    def xc(self) -> "Optional[xen.lowlevel.xc.xc]":
         """Connection to Xen
 
         This property is available only when running on Xen.
