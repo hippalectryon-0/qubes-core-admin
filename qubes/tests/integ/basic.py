@@ -21,7 +21,6 @@
 # License along with this library; if not, see <https://www.gnu.org/licenses/>.
 #
 
-from distutils import spawn
 
 import asyncio
 import os
@@ -182,9 +181,7 @@ class TC_00_Basic(qubes.tests.SystemTestCase):
         self.loop.run_until_complete(asyncio.sleep(0.1))
         self.assertTrue(flag)
 
-    @unittest.skipUnless(
-        spawn.find_executable("xdotool"), "xdotool not installed"
-    )
+    @unittest.skipUnless(shutil.which("xdotool"), "xdotool not installed")
     def test_120_start_standalone_with_cdrom_dom0(self):
         vmname = self.make_vm_name("appvm")
         self.vm = self.app.add_new_vm("StandaloneVM", label="red", name=vmname)
@@ -985,23 +982,17 @@ class TC_30_Gui_daemon(qubes.tests.SystemTestCase):
             clipboard_source, "", "Clipboard not wiped after paste - owner"
         )
 
-    @unittest.skipUnless(
-        spawn.find_executable("xdotool"), "xdotool not installed"
-    )
+    @unittest.skipUnless(shutil.which("xdotool"), "xdotool not installed")
     def test_000_clipboard(self):
         test_string = "test123"
         self.loop.run_until_complete(self._test_clipboard(test_string))
 
-    @unittest.skipUnless(
-        spawn.find_executable("xdotool"), "xdotool not installed"
-    )
+    @unittest.skipUnless(shutil.which("xdotool"), "xdotool not installed")
     def test_001_clipboard_64k(self):
         test_string = "test123ab\n" * 6400
         self.loop.run_until_complete(self._test_clipboard(test_string))
 
-    @unittest.skipUnless(
-        spawn.find_executable("xdotool"), "xdotool not installed"
-    )
+    @unittest.skipUnless(shutil.which("xdotool"), "xdotool not installed")
     def test_002_clipboard_200k_truncated(self):
         test_string = "test123ab\n" * 20000
         self.loop.run_until_complete(
@@ -1010,9 +1001,7 @@ class TC_30_Gui_daemon(qubes.tests.SystemTestCase):
             )
         )
 
-    @unittest.skipUnless(
-        spawn.find_executable("xdotool"), "xdotool not installed"
-    )
+    @unittest.skipUnless(shutil.which("xdotool"), "xdotool not installed")
     def test_002_clipboard_200k(self):
         test_string = "test123ab\n" * 20000
         self.loop.run_until_complete(
@@ -1021,9 +1010,7 @@ class TC_30_Gui_daemon(qubes.tests.SystemTestCase):
             )
         )
 
-    @unittest.skipUnless(
-        spawn.find_executable("xdotool"), "xdotool not installed"
-    )
+    @unittest.skipUnless(shutil.which("xdotool"), "xdotool not installed")
     def test_002_clipboard_300k(self):
         test_string = "test123ab\n" * 30000
         self.loop.run_until_complete(
