@@ -709,8 +709,10 @@ class TestRun:
         runtime = {}
         runtime["dom"] = round(domain_time - start_time, ROUND_PRECISION)
         if test.target_dispvm:
+            assert target_time is not None
             runtime["disp"] = round(target_time - domain_time, ROUND_PRECISION)
             if not test.preload_max:
+                assert startup_time is not None
                 runtime["start"] = round(
                     startup_time - target_time, ROUND_PRECISION
                 )
