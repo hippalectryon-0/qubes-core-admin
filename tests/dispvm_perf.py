@@ -62,7 +62,7 @@ from datetime import datetime, timezone
 
 from deepmerge import Merger
 import qubesadmin
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
     import qubesadmin.vm
@@ -98,7 +98,7 @@ class TestConfig:
     :param bool target_dispvm: target or not a disposable qube
     :param bool admin_api: use the Admin API directly
     :param str extra_id: base test that extra ID varies from
-    :param int preload_delay: time to start generating fresh preload after use
+    :param float preload_delay: time to start generating fresh preload after use
     :param str pretty_name: human-readable name
 
     Notes
@@ -151,7 +151,7 @@ class TestConfig:
     target_dispvm: bool = True
     admin_api: bool = False
     extra_id: str = ""
-    preload_delay: int = None
+    preload_delay: Optional[float] = None
     pretty_name: str = dataclasses.field(init=False)
 
     def __post_init__(self):

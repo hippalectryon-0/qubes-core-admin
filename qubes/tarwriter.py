@@ -22,12 +22,13 @@ import os
 import subprocess
 import tarfile
 import io
+from typing import Any
 
 BUF_SIZE = 409600
 
 
 class TarSparseInfo(tarfile.TarInfo):
-    pax_headers: dict
+    pax_headers: Any
 
     def __init__(self, name="", sparsemap=None):
         super().__init__(name)
