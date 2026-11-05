@@ -207,16 +207,14 @@ class TestConfig:
         pretty_name = "{} runs".format(pretty_from.capitalize())
         if pretty_strategy:
             pretty_name += " {}".format(pretty_strategy)
-        if pretty_what:
-            app_suffix = ""
-            if self.concurrent:
-                app_suffix = "s"
-            pretty_name += " {} app{} ".format(pretty_what, app_suffix)
+        app_suffix = ""
+        if self.concurrent:
+            app_suffix = "s"
+        pretty_name += " {} app{} ".format(pretty_what, app_suffix)
         pretty_name += "{}".format(pretty_to)
         if pretty_delay:
             pretty_name += "{}".format(pretty_delay)
-        if pretty_type:
-            pretty_name += " ({})".format(pretty_type)
+        pretty_name += " ({})".format(pretty_type)
         self.pretty_name = pretty_name
 
 
