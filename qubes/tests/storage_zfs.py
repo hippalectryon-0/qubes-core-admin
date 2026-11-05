@@ -144,7 +144,7 @@ def dump_zfs_filesystems(text: str = "", dataset: str = "") -> None:
 
 class AsyncLoopHolderMixin(qubes.tests.QubesTestCase):
     def rc(self, future: Coroutine[Any, Any, Any]) -> Any:
-        return self.loop.run_until_complete(future)  # type: ignore
+        return self.loop.run_until_complete(future)
 
 
 class ZFSBase(AsyncLoopHolderMixin):
