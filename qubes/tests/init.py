@@ -21,7 +21,9 @@
 #
 
 import asyncio
+import importlib.metadata
 import unittest
+import unittest.mock
 import uuid
 
 import lxml.etree
@@ -673,3 +675,23 @@ class TC_40_Utils_AsyncShield(qubes.tests.QubesTestCase):
 
     def test_004_shield_on_exc_of_sync(self):
         self.loop.run_until_complete(self.call_shield_on_exc_of_sync())
+
+
+class TC_41_Utils(qubes.tests.QubesTestCase):
+    def test_000_get_entry_point_one_duplicate(self):
+        epoints = [
+            importlib.metadata.EntryPoint("name", "module1:attr", "group"),
+            importlib.metadata.EntryPoint("name", "module2:attr", "group"),
+        ]
+        with unittest.mock.patch(
+            "importlib.metadata.entry_points", return_value=epoints
+        ):
+            with self.assertRaisesRegex(
+                TypeError, "module1:attr, module2:attr"
+            ):
+                qubes.utils.get_entry_point_one("group", "name")
+
+    def test_010_get_timezone_no_localtime(self):
+        with unittest.mock.patch("os.path.islink", return_value=False):
+            with unittest.mock.patch("os.stat", side_effect=FileNotFoundError):
+                self.assertIsNone(qubes.utils.get_timezone())
