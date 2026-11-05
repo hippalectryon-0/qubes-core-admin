@@ -31,7 +31,7 @@ class DVMTemplateMixin(qubes.events.Emitter):
     VM class capable of being disposable template.
     """
 
-    app: Any
+    app: "qubes.app.Qubes"
     features: Any
     log: Any
     name: Any

@@ -126,7 +126,7 @@ def vmid_to_ipv4(prefix, vmid):
 class NetVMMixin(qubes.events.Emitter):
     """Mixin containing network functionality"""
 
-    app: Any
+    app: "qubes.app.Qubes"
     create_qdb_entries: Any
     features: Any
     is_fully_usable: Any

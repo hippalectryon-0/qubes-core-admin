@@ -258,7 +258,7 @@ class BaseVM(qubes.PropertyHolder):
     :py:class:`qubes.vm.qubesvm.QubesVM`.
     """
 
-    app: Any
+    app: "qubes.app.Qubes"
     features: Any
     name: Any
 
